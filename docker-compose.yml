@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.50.1
+    container_name: prometheus
+    volumes:
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: always
+    networks:
+      - new-net
+
+  grafana:
+    image: grafana/grafana:10.2.4
+    container_name: grafana
+    volumes:
+      - "./datasources:/etc/grafana/provisioning/datasources/"
+      - "./dashboards:/etc/grafana/provisioning/dashboards/"
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    restart: always
+    networks:
+      - new-net
+
+volumes:
+  prometheus:
+    driver: local
+  grafana:
+    driver: local
+
+networks:
+  new-net:
+    external: true
