@@ -15,25 +15,25 @@
       set_fact: url_of_release="https://github.com/prometheus/node_exporter/releases/download/v{{ version }}/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
 
     - name: Apply new variable of path to tar-file
-      set_fact: path_to_tar_file="/home/test/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
+      set_fact: path_to_tar_file="/home/vagrant/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
 
     - name: Apply new variable of path to tar-file
-      set_fact: path_to_node_exporter_file="/home/test/node_exporter-{{ version }}.linux-{{ arch }}/node_exporter"
+      set_fact: path_to_node_exporter_file="/home/vagrant/node_exporter-{{ version }}.linux-{{ arch }}/node_exporter"
 
     - name: Download and run node-exporter
       ansible.builtin.get_url:
         url: "{{ url_of_release }}"
-        dest: /home/test
+        dest: /home/vagrant
 
     - name: Create node_exporter folder
       ansible.builtin.file:
-        path: /home/test/node_exporter
+        path: /home/vagrant/node_exporter
         state: directory
 
     - name: Decompress tar file to folder
       ansible.builtin.unarchive:
         src: "{{ path_to_tar_file }}"
-        dest: /home/test/
+        dest: /home/vagrant
 
     - name: Copy node_exporter.service file to /etc/systemd/system
       copy:
@@ -44,7 +44,7 @@
 
     - name: Copy systemd unit file to systemd folder
       copy:
-        src: /home/test/node_exporter.service
+        src: /home/vagrant/node_exporter.service
         dest: /etc/systemd/system/node_exporter.service
       become: yes
 
@@ -72,8 +72,8 @@
 
     - name: Copy Jinja template to prometheus configuration
       template:
-        src: /home/test/vagrant/prometheus.j2
-        dest: /home/test/vagrant/prometheus/prometheus.yml
+        src: /home/vagrant/prometheus.j2
+        dest: /home/vagrant/prometheus/prometheus.yml
 
     - name: Start docker compose with Prometheus and Grafana
       docker_compose:
