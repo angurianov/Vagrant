@@ -94,6 +94,7 @@
         dest: /home/vagrant/prometheus/prometheus.yml
 
     - name: Start docker compose with Prometheus and Grafana
-      docker_compose:
+      community.docker.docker_compose:
+#      docker_compose:
         project_src: .
         state: present
