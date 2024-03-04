@@ -35,7 +35,7 @@
         src: "{{ path_to_tar_file }}"
         dest: /home/vagrant
 
-    - name: Copy node_exporter.service file to /etc/systemd/system
+    - name: Copy node_exporter binary to /usr/local/bin
       copy:
         src: "{{ path_to_node_exporter_file }}"
         dest: /usr/local/bin/node_exporter
@@ -66,6 +66,11 @@
     - name: Install docker-module for docker network creation
       ansible.builtin.pip:
         name: docker
+      become: yes
+
+    - name: Install python dependencies
+      ansible.builtin.pip:
+        name: requests==2.28.1
       become: yes
 
     - name: Create docker network
