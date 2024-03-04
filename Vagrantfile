@@ -1,22 +1,9 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
 Vagrant.configure("2") do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://vagrantcloud.com/search.
   config.vm.box = "generic/ubuntu2004"
-  config.vm.network "forwarded_port", guest: 3000, host: 3000
-#  config.vm.synced_folder ".", "/vagrant", create: true
-  config.vm.synced_folder ".", "/vagrant"
-  config.vm.provision "file", source: "~/", destination: "/home/vagrant"
+  config.vm.network "forwarded_port", guest: 3000, host: 3000			# проброс порта для графаны
+  config.vm.synced_folder ".", "/vagrant"					# создание общей папки
+  config.vm.provision "file", source: ".", destination: "/home/vagrant"		# копирование файлов внутрь виртуалки
 
 # Install docker
   config.vm.provision "docker" do |d|
@@ -26,11 +13,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.groups = {
-        "localhost" => ["default"],
+        "localhost" => ["default"],						# имя виртуалки не указано, поэтому она будет фигурировать как default. Плейбук отработает без создания инвентори
         "dev_enviroment" => ["default"]
     }
 
   end
-
 
 end
