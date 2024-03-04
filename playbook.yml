@@ -60,6 +60,9 @@
         state: latest
       become: yes
 
+    - name: upgrade docker-py
+      shell: pip install --upgrade docker-py
+
     - name: Install docker-module for docker network creation
       ansible.builtin.pip:
         name: docker
