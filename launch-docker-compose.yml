@@ -14,8 +14,8 @@
 
     - name: Copy Jinja template to prometheus configuration
       template:
-        src: /home/vagrant/docker-compose/prometheus/prometheus.j2
-        dest: /home/vagrant/docker-compose/prometheus/prometheus.yml
+        src: /home/vagrant/prometheus.j2
+        dest: /home/vagrant/prometheus/prometheus.yml
 
     - name: Start docker compose with Prometheus and Grafana
       community.docker.docker_compose:

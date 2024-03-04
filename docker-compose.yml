@@ -5,7 +5,7 @@ services:
     image: prom/prometheus:v2.50.1
     container_name: prometheus
     volumes:
-      - "./docker-compose/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
@@ -18,8 +18,8 @@ services:
     image: grafana/grafana:10.2.4
     container_name: grafana
     volumes:
-      - "./docker-compose/grafana/datasources:/etc/grafana/provisioning/datasources/"
-      - "./docker-compose/grafana/dashboards:/etc/grafana/provisioning/dashboards/"
+      - "./grafana/datasources:/etc/grafana/provisioning/datasources/"
+      - "./grafana/dashboards:/etc/grafana/provisioning/dashboards/"
     depends_on:
       - prometheus
     ports:
