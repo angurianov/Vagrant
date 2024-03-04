@@ -17,7 +17,7 @@
     - name: Apply new variable of path to tar-file
       set_fact: path_to_tar_file="/home/vagrant/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
 
-    - name: Apply new variable of path to tar-file
+    - name: Apply new variable of path to node_exporter
       set_fact: path_to_node_exporter_file="/home/vagrant/node_exporter-{{ version }}.linux-{{ arch }}/node_exporter"
 
     - name: Download and run node-exporter
@@ -54,13 +54,13 @@
         state: restarted
       become: yes
 
-    - name: Install python-module for docker network creation (1st task)
+    - name: Install python3-pip
       apt:
         name: python3-pip
         state: latest
       become: yes
 
-    - name: Install python-module for docker network creation (2nd task)
+    - name: Install docker-module for docker network creation
       ansible.builtin.pip:
         name: docker
       become: yes
@@ -70,10 +70,12 @@
         name: new-net
         driver_options:
           com.docker.network.bridge.name: br-new-net
-#      docker_network:
-#        name: new-net
-#        driver_options:
-#          com.docker.network.bridge.name: br-new-net
+
+    - name: Install docker-compose module
+      ansible.builtin.pip:
+        name: docker-compose
+      become: yes
+
 
     - name: Gathering facts
       setup:
