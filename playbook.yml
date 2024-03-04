@@ -54,6 +54,15 @@
         state: restarted
       become: yes
 
+    - name: Install python-module for docker network creation (1st task)
+      apt:
+        name: python3-pip
+        state: latest
+
+    - name: Install python-module for docker network creation (2nd task)
+      ansible.builtin.pip:
+        name: docker
+
     - name: Create docker network
       community.docker.docker_network:
         name: new-net
