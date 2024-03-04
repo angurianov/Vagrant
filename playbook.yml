@@ -1,8 +1,9 @@
 ---
-- name: Launch all playbooks
-  hosts: localhost
-  become: yes
-  tasks:
-    - include_tasks: docker-install.yml
-    - include_tasks: node-exporter.yml
-    - include_tasks: launch-docker-compose.yml
+- name: Install docker
+  import_playbook: docker-install.yml
+
+- name: Install node-exporter
+  import_playbook: node-exporter.yml
+
+- name: Launch Prometheus and Grafana
+  import_playbook: launch-docker-compose.yml
