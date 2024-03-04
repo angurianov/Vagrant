@@ -16,17 +16,16 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 3000, host: 3000
 #  config.vm.synced_folder ".", "/vagrant", create: true
   config.vm.synced_folder ".", "/vagrant"
-#  config.vm.provision "docker" do |d|
-#
-#  end
+  config.vm.provision "docker" do |d|
+  end
 
 # Run Ansible from the Vagrant VM
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.groups = {
-        "localhost" => ["default"],
-        "dev_enviroment" => ["default"]
-    }
+#        "localhost" => ["default"],
+#        "dev_enviroment" => ["default"]
+#    }
 
   end
 
