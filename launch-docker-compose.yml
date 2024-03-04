@@ -9,18 +9,13 @@
         driver_options:
           com.docker.network.bridge.name: br-new-net
 
-    - name: Create prometheus folder
-      ansible.builtin.file:
-        path: /home/vagrant/prometheus
-        state: directory
-
-    - name: Gathering facts
+    - name: Gathering facts for ip-address of new docker-network
       setup:
 
     - name: Copy Jinja template to prometheus configuration
       template:
-        src: /home/vagrant/prometheus.j2
-        dest: /home/vagrant/prometheus/prometheus.yml
+        src: ./prometheus/prometheus.j2
+        dest: ./prometheus/prometheus.yml
 
     - name: Start docker compose with Prometheus and Grafana
       community.docker.docker_compose:
