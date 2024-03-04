@@ -19,5 +19,5 @@
 
     - name: Start docker compose with Prometheus and Grafana
       community.docker.docker_compose:
-        project_src: ./docker-compose
+        project_src: .
         state: present
