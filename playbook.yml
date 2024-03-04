@@ -5,6 +5,40 @@
     version: 1.7.0      # версия node-exporter, можно поменять на другую
 
   tasks:
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+
     - name: Get architecture and save it in new variable
       shell: dpkg --print-architecture                # вывести архитектуру ПК
       register: architecture
@@ -54,24 +88,24 @@
         state: restarted
       become: yes
 
-    - name: Install python3-pip
-      apt:
-        name: python3-pip
-        state: latest
-      become: yes
-
-    - name: upgrade docker-py
-      shell: pip install --upgrade docker-py
-
-    - name: Install docker-module for docker network creation
-      ansible.builtin.pip:
-        name: docker
-      become: yes
-
-    - name: Install python dependencies
-      ansible.builtin.pip:
-        name: requests==2.28.1
-      become: yes
+#    - name: Install python3-pip
+#      apt:
+#        name: python3-pip
+#        state: latest
+#      become: yes
+#
+#    - name: upgrade docker-py
+#      shell: pip install --upgrade docker-py
+#
+#    - name: Install docker-module for docker network creation
+#      ansible.builtin.pip:
+#        name: docker
+#      become: yes
+#
+#    - name: Install python dependencies
+#      ansible.builtin.pip:
+#        name: requests==2.28.1
+#      become: yes
 
     - name: Create docker network
       community.docker.docker_network:
@@ -79,10 +113,10 @@
         driver_options:
           com.docker.network.bridge.name: br-new-net
 
-    - name: Install docker-compose module
-      ansible.builtin.pip:
-        name: docker-compose
-      become: yes
+#    - name: Install docker-compose module
+#      ansible.builtin.pip:
+#        name: docker-compose
+#      become: yes
 
 
     - name: Gathering facts
