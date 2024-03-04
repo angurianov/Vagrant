@@ -9,6 +9,11 @@
         driver_options:
           com.docker.network.bridge.name: br-new-net
 
+    - name: Create prometheus folder
+      ansible.builtin.file:
+        path: /home/vagrant/prometheus
+        state: directory
+
     - name: Gathering facts
       setup:
 
