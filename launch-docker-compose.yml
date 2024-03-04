@@ -1,0 +1,23 @@
+---
+- name: Launch docker-compose with Prometheus and Grafana
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create docker network
+      community.docker.docker_network:
+        name: new-net
+        driver_options:
+          com.docker.network.bridge.name: br-new-net
+
+    - name: Gathering facts
+      setup:
+
+    - name: Copy Jinja template to prometheus configuration
+      template:
+        src: /home/vagrant/docker-compose/prometheus/prometheus.j2
+        dest: /home/vagrant/docker-compose/prometheus/prometheus.yml
+
+    - name: Start docker compose with Prometheus and Grafana
+      community.docker.docker_compose:
+        project_src: ./docker-compose
+        state: present

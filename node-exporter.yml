@@ -1,0 +1,47 @@
+---
+- name: Install node-exporter
+  hosts: localhost
+  become: yes
+  vars:
+    version: 1.7.0      # версия node-exporter
+  tasks:
+    - name: Get architecture and save it in new variable
+      shell: dpkg --print-architecture
+      register: architecture
+
+    - set_fact: arch={{ architecture.stdout }}
+
+    - name: Apply new variable of url to download
+      set_fact: url_of_release="https://github.com/prometheus/node_exporter/releases/download/v{{ version }}/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
+
+    - name: Apply new variable for path to tar-file
+      set_fact: path_to_tar_file="/home/vagrant/node_exporter/node_exporter-{{ version }}.linux-{{ arch }}.tar.gz"
+
+    - name: Apply new variable for path to node_exporter
+      set_fact: path_to_node_exporter_file="/home/vagrant/node_exporter/node_exporter-{{ version }}.linux-{{ arch }}/node_exporter"
+
+    - name: Download and run node-exporter
+      ansible.builtin.get_url:
+        url: "{{ url_of_release }}"
+        dest: /home/vagrant/node_exporter
+
+    - name: Decompress tar file to folder
+      ansible.builtin.unarchive:
+        src: "{{ path_to_tar_file }}"
+        dest: /home/vagrant/node_exporter
+
+    - name: Copy node_exporter binary to /usr/local/bin
+      copy:
+        src: "{{ path_to_node_exporter_file }}"
+        dest: /usr/local/bin/node_exporter
+        mode: '0755'
+
+    - name: Copy systemd unit file to systemd folder
+      copy:
+        src: /home/vagrant/node_exporter/node_exporter.service
+        dest: /etc/systemd/system/node_exporter.service
+
+    - name: Restart node_exporter.service
+      systemd:
+        name: node_exporter.service
+        state: restarted

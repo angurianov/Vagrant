@@ -1,0 +1,36 @@
+---
+- name: Install docker
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install required system packages
+      apt:
+        pkg:
+          - ca-certificates
+          - curl
+          - python3-pip
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt-cache
+      apt:
+        update_cache: true
+
+    - name: Install docker and components
+      apt:
+        name: ['docker-ce', 'docker-compose-plugin', 'docker-ce-cli', 'containerd.io', 'docker-buildx-plugin']
+        state: latest
+
+    - name: Install Docker modules for Python
+      pip:
+        name: ['docker==6.1.3', 'docker-compose']
