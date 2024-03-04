@@ -1,10 +1,12 @@
 Создание виртуальной машины с помощью Vagrant, в которой через Ansible provision устанавливается Docker, node-exporter, запускается docker-compose с Prometheus и Grafana.
 После выполнения команды vagrant up в браузере хостовой машины по адресу http://localhost:3000 открывается Grafana с Node Exporter Full. Имя и пароль для входа в веб-интерфейс графаны: admin/admin.
 
-Для запуска использовать команду: 
+Для запуска использовать команду:
+```
 git clone git@github.com:angurianov/Vagrant.git && \
 cd Vagrant && \
 vagrant up
+```
 
 ## Vagrant
 Так как в условиях задачи нет требований к используемому провайдеру vagrant и выделяемым системным ресурсам (RAM, CPU), то этот блок конфигурации отсутствует в решении.
